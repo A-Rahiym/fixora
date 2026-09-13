@@ -10,6 +10,8 @@ use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
  * Use on every monetary attribute: `'final_cost' => MoneyCast::class`.
  * Keeps DECIMAL/NUMERIC values as precise decimal strings instead of
  * lossy floats. Phase 6 payments/receipts will rely on this.
+ *
+ * @implements CastsAttributes<string|null, string|null>
  */
 class MoneyCast implements CastsAttributes
 {

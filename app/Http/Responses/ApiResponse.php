@@ -26,6 +26,9 @@ class ApiResponse
         return self::ok($data, $message, 201);
     }
 
+    /**
+     * @param  array<string, mixed>  $errors
+     */
     public static function error(string $message, int $status = 400, array $errors = []): JsonResponse
     {
         return response()->json([
