@@ -1,0 +1,39 @@
+services:
+  fixora-db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: fixora_dev
+      POSTGRES_USER: fixora
+      POSTGRES_PASSWORD: secret
+    ports:
+      - '5434:5432'
+    volumes:
+      - fixora-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U fixora -d fixora_dev']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build: .
+    depends_on:
+      fixora-db:
+        condition: service_healthy
+    volumes:
+      - .:/var/www
+    working_dir: /var/www
+    environment:
+      DB_CONNECTION: pgsql
+      DB_HOST: fixora-db
+      DB_PORT: 5432
+      DB_DATABASE: fixora_dev
+      DB_USERNAME: fixora
+      DB_PASSWORD: secret
+    ports:
+      - '8000:8000'
+    command: sleep infinity
+
+volumes:
+  fixora-pgdata:
