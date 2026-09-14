@@ -26,7 +26,7 @@ class CustomerDedupService
         $normalized = $this->normalizePhone($phone);
 
         return Customer::query()
-            ->get(['id', 'phone'])
+            ->get()
             ->first(function (Customer $customer) use ($normalized, $ignoreId): bool {
                 if ($ignoreId !== null && $customer->id === $ignoreId) {
                     return false;
