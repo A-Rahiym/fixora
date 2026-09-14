@@ -14,6 +14,14 @@ class RolePermissionSeeder extends Seeder
      * @var array<int, array{name: string, module: string, label: string}>
      */
     private array $permissions = [
+        ['name' => 'customers.view', 'module' => 'customers', 'label' => 'View customers'],
+        ['name' => 'customers.create', 'module' => 'customers', 'label' => 'Create customers'],
+        ['name' => 'customers.update', 'module' => 'customers', 'label' => 'Update customers'],
+        ['name' => 'customers.delete', 'module' => 'customers', 'label' => 'Delete customers'],
+        ['name' => 'devices.view', 'module' => 'customers', 'label' => 'View devices'],
+        ['name' => 'devices.create', 'module' => 'customers', 'label' => 'Create devices'],
+        ['name' => 'devices.update', 'module' => 'customers', 'label' => 'Update devices'],
+        ['name' => 'devices.delete', 'module' => 'customers', 'label' => 'Delete devices'],
         ['name' => 'repairs.view', 'module' => 'repairs', 'label' => 'View repairs'],
         ['name' => 'repairs.create', 'module' => 'repairs', 'label' => 'Create repairs'],
         ['name' => 'repairs.update', 'module' => 'repairs', 'label' => 'Update repairs'],
@@ -41,6 +49,8 @@ class RolePermissionSeeder extends Seeder
     private array $rolePermissions = [
         'owner' => '*',
         'manager' => [
+            'customers.view', 'customers.create', 'customers.update', 'customers.delete',
+            'devices.view', 'devices.create', 'devices.update', 'devices.delete',
             'repairs.view', 'repairs.create', 'repairs.update', 'repairs.delete', 'repairs.assign',
             'inventory.view', 'inventory.create', 'inventory.update', 'inventory.delete', 'inventory.adjust',
             'payments.view', 'payments.create',
@@ -49,11 +59,15 @@ class RolePermissionSeeder extends Seeder
             'roles.view',
         ],
         'cashier' => [
+            'customers.view', 'customers.create', 'customers.update',
+            'devices.view',
             'repairs.view',
             'inventory.view',
             'payments.view', 'payments.create',
         ],
         'technician' => [
+            'customers.view',
+            'devices.view',
             'repairs.view', 'repairs.update', 'repairs.assign',
             'inventory.view',
         ],
