@@ -1,5 +1,9 @@
 <?php
 
+use App\Models\Customer;
+use App\Models\Device;
+use App\Models\Role;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -44,7 +48,22 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
+function apiToken(string $role = 'owner'): string
 {
-    // ..
+    $roleModel = Role::where('name', $role)->firstOrFail();
+    $user = User::factory()->create(['role_id' => $roleModel->id]);
+
+    return $user->createToken('api')->plainTextToken;
+}
+
+function repairPayload(Customer $customer, Device $device): array
+{
+    return [
+        'customer_id' => $customer->id,
+        'device_id' => $device->id,
+        'priority' => 'high',
+        'reported_problem' => 'Screen flickers on boot',
+        'estimate_amount' => '120.50',
+        'warranty_days' => 30,
+    ];
 }

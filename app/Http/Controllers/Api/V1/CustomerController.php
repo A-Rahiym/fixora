@@ -87,7 +87,7 @@ class CustomerController extends Controller
     }
 
     /**
-     * Soft-delete; rejected when devices still reference the customer.
+     * Soft-delete; rejected when devices or repairs still reference the customer.
      */
     public function destroy(int $customer): JsonResponse
     {
@@ -95,6 +95,10 @@ class CustomerController extends Controller
 
         if ($record->devices()->exists()) {
             return ApiResponse::error('Customer cannot be deleted while devices exist.', 422);
+        }
+
+        if ($record->repairs()->exists()) {
+            return ApiResponse::error('Customer cannot be deleted while repairs exist.', 422);
         }
 
         $record->delete();

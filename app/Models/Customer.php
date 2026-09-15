@@ -45,4 +45,12 @@ class Customer extends Model
     {
         return $this->hasMany(Device::class);
     }
+
+    /**
+     * @return HasMany<Repair, $this>
+     */
+    public function repairs(): HasMany
+    {
+        return $this->hasMany(Repair::class);
+    }
 }

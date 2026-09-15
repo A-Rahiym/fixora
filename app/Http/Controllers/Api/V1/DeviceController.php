@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\Devices\DeviceStoreRequest;
 use App\Http\Requests\Api\V1\Devices\DeviceUpdateRequest;
 use App\Http\Resources\Api\V1\DeviceResource;
+use App\Http\Resources\Api\V1\RepairResource;
 use App\Http\Responses\ApiResponse;
 use App\Models\Device;
 use Illuminate\Http\JsonResponse;
@@ -69,23 +70,32 @@ class DeviceController extends Controller
     }
 
     /**
-     * Soft-delete; repair-link guard lands with Phase 3 repairs.
+     * Soft-delete; rejected when repairs still reference the device.
      */
     public function destroy(int $device): JsonResponse
     {
         $record = Device::findOrFail($device);
+
+        if ($record->repairs()->exists()) {
+            return ApiResponse::error('Device cannot be deleted while repairs exist.', 422);
+        }
+
         $record->delete();
 
         return ApiResponse::ok(null, 'Device deleted.');
     }
 
     /**
-     * Scoped repairs view — stubbed until Phase 3.
+     * Scoped repairs view for the device.
      */
-    public function repairs(int $device): JsonResponse
+    public function repairs(int $device, Request $request): JsonResponse
     {
-        Device::findOrFail($device);
+        $record = Device::findOrFail($device);
 
-        return ApiResponse::ok([]);
+        $repairs = $record->repairs()->with(['customer', 'device', 'technician'])->latest('id')
+            ->paginate(15)
+            ->through(fn ($repair) => RepairResource::make($repair)->resolve($request));
+
+        return ApiResponse::ok($repairs);
     }
 }

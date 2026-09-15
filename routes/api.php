@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\CustomerController;
 use App\Http\Controllers\Api\V1\DeviceController;
+use App\Http\Controllers\Api\V1\RepairController;
 use App\Http\Controllers\Api\V1\RoleController;
 use App\Http\Controllers\Api\V1\StaffController;
 use App\Http\Responses\ApiResponse;
@@ -54,5 +55,18 @@ Route::prefix('v1')->group(function () {
         Route::patch('/devices/{device}', [DeviceController::class, 'update'])->middleware('permission:devices.update');
         Route::delete('/devices/{device}', [DeviceController::class, 'destroy'])->middleware('permission:devices.delete');
         Route::get('/devices/{device}/repairs', [DeviceController::class, 'repairs'])->middleware('permission:repairs.view');
+
+        Route::get('/repairs', [RepairController::class, 'index'])->middleware('permission:repairs.view');
+        Route::post('/repairs', [RepairController::class, 'store'])->middleware('permission:repairs.create');
+        Route::get('/repairs/{repair}', [RepairController::class, 'show'])->middleware('permission:repairs.view');
+        Route::patch('/repairs/{repair}', [RepairController::class, 'update'])->middleware('permission:repairs.update');
+        Route::delete('/repairs/{repair}', [RepairController::class, 'destroy'])->middleware('permission:repairs.delete');
+        Route::post('/repairs/{repair}/assign', [RepairController::class, 'assign'])->middleware('permission:repairs.assign');
+        Route::post('/repairs/{repair}/diagnosis', [RepairController::class, 'diagnosis'])->middleware('permission:repairs.update');
+        Route::post('/repairs/{repair}/notes', [RepairController::class, 'notes'])->middleware('permission:repairs.update');
+        Route::post('/repairs/{repair}/approve', [RepairController::class, 'approve'])->middleware('permission:repairs.update');
+        Route::post('/repairs/{repair}/status', [RepairController::class, 'status'])->middleware('permission:repairs.update');
+        Route::post('/repairs/{repair}/complete', [RepairController::class, 'complete'])->middleware('permission:repairs.update');
+        Route::post('/repairs/{repair}/collect', [RepairController::class, 'collect'])->middleware('permission:repairs.update');
     });
 });
