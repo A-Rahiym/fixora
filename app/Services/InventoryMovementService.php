@@ -54,7 +54,10 @@ class InventoryMovementService
                 'created_by' => $user->id,
             ]);
 
-            $locked->update(['quantity' => $newQuantity]);
+            // Direct assignment, not mass assignment: quantity stays out of
+            // $fillable so only this service can write it.
+            $locked->quantity = $newQuantity;
+            $locked->save();
 
             return $movement->load('item');
         });
