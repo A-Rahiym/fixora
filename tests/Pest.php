@@ -2,6 +2,7 @@
 
 use App\Models\Customer;
 use App\Models\Device;
+use App\Models\InventoryCategory;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -65,5 +66,16 @@ function repairPayload(Customer $customer, Device $device): array
         'reported_problem' => 'Screen flickers on boot',
         'estimate_amount' => '120.50',
         'warranty_days' => 30,
+    ];
+}
+
+function inventoryPayload(?InventoryCategory $category = null): array
+{
+    return [
+        'category_id' => ($category ?? InventoryCategory::factory()->create())->id,
+        'sku' => 'SKU-'.fake()->unique()->bothify('########'),
+        'name' => 'iPhone 14 Display',
+        'unit_cost' => '45.00',
+        'unit_price' => '89.99',
     ];
 }
