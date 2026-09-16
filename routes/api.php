@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\CustomerController;
 use App\Http\Controllers\Api\V1\DeviceController;
+use App\Http\Controllers\Api\V1\InventoryController;
 use App\Http\Controllers\Api\V1\RepairController;
 use App\Http\Controllers\Api\V1\RoleController;
 use App\Http\Controllers\Api\V1\StaffController;
@@ -55,6 +56,15 @@ Route::prefix('v1')->group(function () {
         Route::patch('/devices/{device}', [DeviceController::class, 'update'])->middleware('permission:devices.update');
         Route::delete('/devices/{device}', [DeviceController::class, 'destroy'])->middleware('permission:devices.delete');
         Route::get('/devices/{device}/repairs', [DeviceController::class, 'repairs'])->middleware('permission:repairs.view');
+
+        Route::get('/inventory/low-stock', [InventoryController::class, 'lowStock'])->middleware('permission:inventory.view');
+        Route::get('/inventory', [InventoryController::class, 'index'])->middleware('permission:inventory.view');
+        Route::post('/inventory', [InventoryController::class, 'store'])->middleware('permission:inventory.create');
+        Route::get('/inventory/{item}', [InventoryController::class, 'show'])->middleware('permission:inventory.view');
+        Route::patch('/inventory/{item}', [InventoryController::class, 'update'])->middleware('permission:inventory.update');
+        Route::delete('/inventory/{item}', [InventoryController::class, 'destroy'])->middleware('permission:inventory.delete');
+        Route::get('/inventory/{item}/movements', [InventoryController::class, 'movements'])->middleware('permission:inventory.view');
+        Route::post('/inventory/{item}/adjust', [InventoryController::class, 'adjust'])->middleware('permission:inventory.adjust');
 
         Route::get('/repairs', [RepairController::class, 'index'])->middleware('permission:repairs.view');
         Route::post('/repairs', [RepairController::class, 'store'])->middleware('permission:repairs.create');
