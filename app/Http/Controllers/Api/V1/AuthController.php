@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Middleware\AuthenticateViaCookieOrBearer;
 use App\Http\Requests\Api\V1\Auth\ForgotPasswordRequest;
 use App\Http\Requests\Api\V1\Auth\LoginRequest;
 use App\Http\Requests\Api\V1\Auth\ResetPasswordRequest;
@@ -36,14 +37,25 @@ class AuthController extends Controller
         return ApiResponse::ok([
             'token' => $token,
             'user' => new UserResource($user),
-        ], 'Logged in.');
+        ], 'Logged in.')->withCookie(cookie(
+            AuthenticateViaCookieOrBearer::COOKIE,
+            $token,
+            60 * 24 * 7,
+            '/',
+            null,
+            app()->isProduction(),
+            true,
+            false,
+            'Lax',
+        ));
     }
 
     public function logout(Request $request): JsonResponse
     {
         $request->user()->currentAccessToken()->delete();
 
-        return ApiResponse::ok(null, 'Logged out.');
+        return ApiResponse::ok(null, 'Logged out.')
+            ->withoutCookie(AuthenticateViaCookieOrBearer::COOKIE, '/');
     }
 
     public function me(Request $request): JsonResponse

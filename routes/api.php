@@ -26,7 +26,7 @@ Route::prefix('v1')->group(function () {
         Route::post('/reset-password', [AuthController::class, 'resetPassword'])->middleware('throttle:6,1');
     });
 
-    Route::middleware(['auth:sanctum', 'active'])->group(function () {
+    Route::middleware(['token.cookie', 'auth:sanctum', 'active'])->group(function () {
         Route::prefix('auth')->group(function () {
             Route::post('/logout', [AuthController::class, 'logout']);
             Route::get('/me', [AuthController::class, 'me']);
