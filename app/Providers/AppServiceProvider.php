@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Carbon\CarbonImmutable;
+use Dedoc\Scramble\Scramble;
+use Dedoc\Scramble\Support\Generator\SecurityScheme;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
@@ -25,6 +27,21 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->configureDefaults();
+        $this->configureApiDocs();
+    }
+
+    /**
+     * Document the minimal hybrid credential (Bearer header first,
+     * fixora_token HttpOnly cookie fallback) in the OpenAPI document.
+     */
+    protected function configureApiDocs(): void
+    {
+        Scramble::extendOpenApi(function ($openApi): void {
+            $openApi->secure(
+                SecurityScheme::apiKey('cookie', 'fixora_token')
+                    ->setDescription('HttpOnly cookie set on login; fallback when no Authorization header is sent.')
+            );
+        });
     }
 
     /**
