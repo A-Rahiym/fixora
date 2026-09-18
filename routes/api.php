@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\CustomerController;
+use App\Http\Controllers\Api\V1\DashboardController;
 use App\Http\Controllers\Api\V1\DeviceController;
 use App\Http\Controllers\Api\V1\InventoryController;
 use App\Http\Controllers\Api\V1\RepairController;
@@ -30,6 +31,13 @@ Route::prefix('v1')->group(function () {
         Route::prefix('auth')->group(function () {
             Route::post('/logout', [AuthController::class, 'logout']);
             Route::get('/me', [AuthController::class, 'me']);
+        });
+
+        Route::prefix('dashboard')->middleware('permission:dashboard.view')->group(function () {
+            Route::get('/summary', [DashboardController::class, 'summary']);
+            Route::get('/repair-pipeline', [DashboardController::class, 'repairPipeline']);
+            Route::get('/recent-activity', [DashboardController::class, 'recentActivity']);
+            Route::get('/low-stock', [DashboardController::class, 'lowStock']);
         });
 
         Route::get('/staff', [StaffController::class, 'index'])->middleware('permission:staff.view');

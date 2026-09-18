@@ -35,6 +35,7 @@ class RolePermissionSeeder extends Seeder
         ['name' => 'payments.view', 'module' => 'payments', 'label' => 'View payments'],
         ['name' => 'payments.create', 'module' => 'payments', 'label' => 'Record payments'],
         ['name' => 'reports.view', 'module' => 'reports', 'label' => 'View reports'],
+        ['name' => 'dashboard.view', 'module' => 'reports', 'label' => 'View dashboard'],
         ['name' => 'staff.view', 'module' => 'staff', 'label' => 'View staff'],
         ['name' => 'staff.create', 'module' => 'staff', 'label' => 'Create staff'],
         ['name' => 'staff.update', 'module' => 'staff', 'label' => 'Update staff'],
@@ -55,6 +56,7 @@ class RolePermissionSeeder extends Seeder
             'inventory.view', 'inventory.create', 'inventory.update', 'inventory.delete', 'inventory.adjust',
             'payments.view', 'payments.create',
             'reports.view',
+            'dashboard.view',
             'staff.view', 'staff.create', 'staff.update', 'staff.disable',
             'roles.view',
         ],
@@ -64,15 +66,18 @@ class RolePermissionSeeder extends Seeder
             'repairs.view',
             'inventory.view',
             'payments.view', 'payments.create',
+            'dashboard.view',
         ],
         'technician' => [
             'customers.view',
             'devices.view',
             'repairs.view', 'repairs.update', 'repairs.assign',
             'inventory.view',
+            'dashboard.view',
         ],
         'storekeeper' => [
             'inventory.view', 'inventory.create', 'inventory.update', 'inventory.delete', 'inventory.adjust',
+            'dashboard.view',
         ],
     ];
 
